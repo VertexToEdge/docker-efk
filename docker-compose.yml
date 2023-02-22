@@ -3,14 +3,14 @@ version: '3.2'
 services:
   elasticsearch:
     build:
-      context: "${PWD}/elasticsearch/"
+      context: "./elasticsearch/"
       dockerfile: Dockerfile
     volumes:
       - type: bind
-        source: "${PWD}/elasticsearch/config/elasticsearch.yml"
+        source: "./elasticsearch/config/elasticsearch.yml"
         target: /usr/share/elasticsearch/config/elasticsearch.yml
         read_only: true
-      - "${PWD}/elasticsearch/data:/var/lib/elasticsearch/data"
+      - "./elasticsearch/data:/var/lib/elasticsearch/data"
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -19,48 +19,40 @@ services:
       ELASTIC_PASSWORD: elastic
       discovery.type: single-node
     networks:
-      - elk
+      - efk
 
-  logstash:
+  fluentd:
     build:
-      context: "${PWD}/logstash/"
+      context: "./fluentd/"
       dockerfile: Dockerfile
     volumes:
       - type: bind
-        source: "${PWD}/logstash/config/logstash.yml"
-        target: /usr/share/logstash/config/logstash.yml
-        read_only: true
-      - type: bind
-        source: "${PWD}/logstash/pipeline"
-        target: /usr/share/logstash/pipeline
+        source: "./fluentd/config/fluent.conf"
+        target: /fluentd/etc/fluent.conf
         read_only: true
     ports:
-      - "5001:5001/tcp"
-      - "5001:5001/udp"
-      - "9600:9600"
-    environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      - "24224:24224"
     networks:
-      - elk
+      - efk
     depends_on:
       - elasticsearch
 
   kibana:
     build:
-      context: "${PWD}/kibana/"
+      context: "./kibana/"
       dockerfile: Dockerfile
     volumes:
       - type: bind
-        source: "${PWD}/kibana/config/kibana.yml"
+        source: "./kibana/config/kibana.yml"
         target: /usr/share/kibana/config/kibana.yml
         read_only: true
     ports:
       - "5601:5601"
     networks:
-      - elk
+      - efk
     depends_on:
       - elasticsearch
 
 networks:
-  elk:
+  efk:
     driver: bridge
