@@ -13,10 +13,19 @@ docker-compose version 1.23.2, build 1110ad01
 ```shell
 $ docker-compose up
 
-Creating network "docker-elk_elk" with driver "bridge"
-Building elasticsearch
-Step 1/1 : FROM docker.elastic.co/elasticsearch/elasticsearch:7.8.1
- ---> a529963ec236
+[+] Running 3/0
+ ⠿ Container docker-efk-elasticsearch-1  Created                                                                                                      0.0s
+ ⠿ Container docker-efk-kibana-1         Created                                                                                                      0.0s
+ ⠿ Container docker-efk-fluentd-1        Created                                                                                                      0.0s
+Attaching to docker-efk-elasticsearch-1, docker-efk-fluentd-1, docker-efk-kibana-1
+docker-efk-fluentd-1        | 2023-02-22 13:51:50 +0000 [info]: init supervisor logger path=nil rotate_age=nil rotate_size=nil
+docker-efk-fluentd-1        | 2023-02-22 13:51:50 +0000 [info]: parsing config file is succeeded path="/fluentd/etc/fluent.conf"
+docker-efk-fluentd-1        | 2023-02-22 13:51:50 +0000 [info]: gem 'fluentd' version '1.15.3'
+docker-efk-fluentd-1        | 2023-02-22 13:51:50 +0000 [info]: gem 'fluent-plugin-elasticsearch' version '4.0.1'
+docker-efk-fluentd-1        | 2023-02-22 13:51:50 +0000 [info]: using configuration file: <ROOT>
+docker-efk-fluentd-1        |   <source>
+docker-efk-fluentd-1        |     @type tcp
+docker-efk-fluentd-1        |     port 24224
 ```
 
 
